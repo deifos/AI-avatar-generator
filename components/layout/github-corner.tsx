@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { Github } from 'lucide-react';
-import Link from 'next/link';
+import { Github } from "lucide-react";
+import Link from "next/link";
 
 export function GitHubCorner() {
   return (
     <Link
-      href="https://github.com"
+      href="https://github.com/deifos/AI-avatar-generator"
       target="_blank"
       rel="noopener noreferrer"
       className="absolute top-0 right-0 z-50"
