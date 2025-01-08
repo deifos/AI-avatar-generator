@@ -24,6 +24,17 @@ export default function Footer() {
           >
             <XIcon className="w-5 h-5" />
           </a>
+          powered by{" "}
+          <span>
+            <a
+              href="https://fal.ai/"
+              target="_blank"
+              rel="noreferrer"
+              className="text-blue-500 hover:underline"
+            >
+              FalAI
+            </a>{" "}
+          </span>
         </div>
       </div>
     </footer>

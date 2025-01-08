@@ -4,6 +4,7 @@ export const XIcon = ({ className = "", ...props }) => (
   <svg
     viewBox="0 0 24 24"
     aria-hidden="true"
+    fill="currentColor"
     className={`r-18jsvk2 r-4qtqp9 r-yyyyoo r-16y2uox r-8kz0gk r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-lrsllp ${className}`}
     {...props}
   >

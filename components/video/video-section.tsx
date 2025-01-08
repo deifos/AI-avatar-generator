@@ -2,15 +2,16 @@
 
 import { useState, useRef } from "react";
 import { PromptForm } from "../prompt-form";
-import { GeneratedVideo } from "./generated-video";
 
 import { GenerateVideo } from "@/actions/GenerateVideo";
+import { useApiKey } from "@/hooks/useApiKey";
+import { useToast } from "@/hooks/use-toast";
 
 interface VideoSectionProps {
   onVideoCreated?: (data: { url: string; prompt: string }) => void;
   initialPrompt?: string;
   sourceImage?: string;
-  setGeneratingVideo?: (isGenerating: boolean) => void;
+  setIsGeneratingVideo?: (isGenerating: boolean) => void;
 }
 
 export const dynamic = "force-dynamic"; //TODO: Remove this when done testing
@@ -19,56 +20,79 @@ export function VideoSection({
   onVideoCreated,
   initialPrompt = "",
   sourceImage,
-  setGeneratingVideo,
+  setIsGeneratingVideo,
 }: VideoSectionProps) {
-  const [generatedVideo, setGeneratedVideo] = useState<{
-    url: string;
-    prompt: string;
-  } | null>(null);
+  const [isPending, setIsPending] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const apiKey = useApiKey((state) => state.apiKey);
+  const { toast } = useToast();
 
   const handleGenerate = async (prompt: string) => {
-    setGeneratingVideo?.(true);
-    // if (!sourceImage) {
-    //   alert("Please upload or generate an image first.");
-    //   return;
-    // }
-    // const data = await GenerateVideo(prompt, sourceImage);
-    setTimeout(() => {
-      setGeneratingVideo?.(false);
-      const data = {
-        video: {
-          url: "https://fal.media/files/penguin/oAWALrFRg642ohxntO1uw_output.mp4",
-        },
-      }; //TODO: Remove this when done testing
-      prompt = "test";
-      onVideoCreated?.({ url: data.video.url, prompt });
-    }, 2000);
-  };
+    setIsGeneratingVideo?.(true);
+    setIsPending(true);
+    if (!sourceImage) {
+      alert("Please upload or generate an image first.");
+      setIsGeneratingVideo?.(false);
+      setIsPending(false);
+      return;
+    }
 
-  const handleTryAgain = () => {
-    setGeneratedVideo(null);
-    window.scrollTo({ top: window.innerHeight, behavior: "smooth" });
+    if (!prompt.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Empty Prompt",
+        description: "Please enter a prompt first",
+      });
+      setIsGeneratingVideo?.(false);
+      setIsPending(false);
+      return;
+    }
+
+    try {
+      const data = await GenerateVideo(prompt, sourceImage, apiKey);
+      onVideoCreated?.({ url: data.video.url, prompt });
+
+      toast({
+        title: "Success",
+        description: "Hooray video has been generated successfully",
+      });
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error occurred";
+
+      toast({
+        variant: "destructive",
+        title: "Video generation Failed",
+        description: errorMessage,
+      });
+    } finally {
+      setIsPending(false);
+      setIsGeneratingVideo?.(false);
+    }
   };
 
   return (
     <div ref={sectionRef} className="space-y-4 p-6">
-      {generatedVideo ? (
-        <GeneratedVideo
-          videoUrl={generatedVideo.url}
-          prompt={generatedVideo.prompt}
-          onTryAgain={handleTryAgain}
+      <>
+        <h2 className="text-lg font-semibold">Generate the video</h2>
+        <span>
+          Video Generations are using Kling 1.6 powered by{" "}
+          <a
+            href="https://fal.ai/"
+            target="_blank"
+            rel="noreferrer"
+            className="text-blue-500 hover:underline"
+          >
+            FalAI
+          </a>
+        </span>
+        <PromptForm
+          initialPrompt={initialPrompt}
+          onSubmit={handleGenerate}
+          allowUpload={false}
+          isPending={isPending}
         />
-      ) : (
-        <>
-          <h2 className="text-lg font-semibold">Create Your Video</h2>
-          <PromptForm
-            initialPrompt={initialPrompt}
-            onSubmit={handleGenerate}
-            allowUpload={false}
-          />
-        </>
-      )}
+      </>
     </div>
   );
 }

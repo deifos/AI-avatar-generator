@@ -6,9 +6,8 @@ import { PromptSection } from "@/components/prompt-section";
 import { ImageGrid } from "@/components/image-grid";
 import { VideoSection } from "@/components/video/video-section";
 import { VideoGrid } from "@/components/video/video-grid";
-// import { SourceImage } from "@/components/video/source-image";
 import { Button } from "@/components/ui/button";
-import { LoaderCircle, Video } from "lucide-react";
+import { Download, LoaderCircle, Video } from "lucide-react";
 import Footer from "@/components/layout/Footer";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
@@ -32,7 +31,8 @@ export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const scrollTargetRef = useRef<HTMLDivElement>(null);
-  const [isGeneratingVideo, setGeneratingVideo] = useState(false);
+  const [isGeneratingVideo, setIsGeneratingVideo] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const scrollToVideo = () => {
     setShowVideo(true);
@@ -41,7 +41,7 @@ export default function Home() {
     }, 100);
   };
 
-  const handleImageCreated = (data: { url: string; prompt: string }) => {
+  const handleImageCreated = (data: { url: string; prompt: string } | null) => {
     setHasImage(true);
     setImageData(data);
   };
@@ -74,6 +74,33 @@ export default function Home() {
     videoRef.current.pause();
   };
 
+  const handleDownload = async () => {
+    setIsDownloading(true);
+    try {
+      if (!videoData?.url) {
+        throw new Error("Video URL is undefined");
+      }
+      const response = await fetch(videoData.url);
+      const blob = await response.blob();
+
+      const timestamp = new Date().getTime();
+      const filename = `generated-video-${timestamp}.mp4`;
+
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      URL.revokeObjectURL(link.href);
+    } catch (error) {
+      console.error("Failed to download video:", error);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
   return (
     <main className="min-h-screen bg-background">
       <Header />
@@ -81,6 +108,22 @@ export default function Home() {
         {/* IMAGE SECTION */}
         <div className="grid lg:grid-cols-2 gap-8 items-start">
           <div className="bg-card rounded-lg shadow-sm border">
+            <div className="px-6 pt-6">
+              <h2 className="text-lg font-semibold ">
+                Generate or upload the image for your avatar
+              </h2>
+              <span>
+                Image generations are using Flux-Ultra powered by{" "}
+                <a
+                  href="https://fal.ai/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-blue-500 hover:underline"
+                >
+                  FalAI
+                </a>
+              </span>
+            </div>
             <PromptSection
               onImageCreated={handleImageCreated}
               selectedPrompt={selectedPrompt}
@@ -99,7 +142,7 @@ export default function Home() {
             size="lg"
             onClick={scrollToVideo}
             className="gap-2"
-            disabled={!hasImage}
+            disabled={!hasImage || !imageData}
           >
             <Video className="h-4 w-4" />
             Go to Generate Video
@@ -114,15 +157,15 @@ export default function Home() {
                   initialPrompt={videoPromptSelected}
                   sourceImage={imageData.url}
                   onVideoCreated={handleVideoCreated}
-                  setGeneratingVideo={setGeneratingVideo}
+                  setIsGeneratingVideo={setIsGeneratingVideo}
                 />
                 {/* GENERATED OR UPLOADED IMAGE */}
                 <div className="relative">
-                  {/* <SourceImage url={imageData.url} prompt={imageData.prompt} /> */}
                   <div className="space-y-4 p-2 text-center">
                     {isGeneratingVideo && (
                       <Alert className="text-center bg-yellow-200 ">
-                        Video generation could take up to 6 minutes...
+                        Video generation could take up to 6 minutes - do not
+                        close this page.
                       </Alert>
                     )}
                     <h2 className="text-lg font-semibold">Source Image</h2>
@@ -166,12 +209,10 @@ export default function Home() {
                 <video
                   src={videoData?.url}
                   ref={videoRef}
-                  muted
                   loop
+                  autoPlay={true}
                   playsInline
                   onLoadedData={() => setIsLoaded(true)}
-                  onMouseEnter={handlePlay}
-                  onMouseLeave={handlePause}
                   className="w-full h-full object-cover"
                 >
                   <track kind="captions" />
@@ -185,6 +226,14 @@ export default function Home() {
                 <div ref={scrollTargetRef}></div>
               </div>
             </div>
+            <Button
+              onClick={handleDownload}
+              className="flex items-center gap-2 mx-auto"
+              disabled={isDownloading || !videoData?.url}
+            >
+              <Download className="h-4 w-4" />
+              {isDownloading ? "Downloading..." : "Download Video"}
+            </Button>
             {/* {videoPromptSelected} */}
           </div>
         )}

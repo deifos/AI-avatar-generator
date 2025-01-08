@@ -1,10 +1,11 @@
-import './globals.css';
-import type { Metadata } from 'next';
-import { mono } from './fonts';
+import "./globals.css";
+import type { Metadata } from "next";
+import { mono } from "./fonts";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: 'AI Avatar Creator',
-  description: 'Create stunning AI-powered avatars',
+  title: "AI Avatar Creator",
+  description: "Create stunning AI-powered avatars",
 };
 
 export default function RootLayout({
@@ -14,7 +15,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${mono.variable} font-mono antialiased`}>{children}</body>
+      <body className={`${mono.variable} font-mono antialiased`}>
+        {children}
+        <Toaster />
+      </body>
     </html>
   );
 }

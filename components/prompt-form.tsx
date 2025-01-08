@@ -12,6 +12,7 @@ interface PromptFormProps {
   onPromptChange?: (prompt: string) => void;
   onUpload?: () => void;
   allowUpload?: boolean;
+  isPending?: boolean;
 }
 
 export function PromptForm({
@@ -20,9 +21,9 @@ export function PromptForm({
   onPromptChange,
   onUpload,
   allowUpload,
+  isPending,
 }: PromptFormProps) {
   const [prompt, setPrompt] = useState(initialPrompt);
-  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     setPrompt(initialPrompt);
@@ -35,9 +36,7 @@ export function PromptForm({
 
   const handleSubmit = () => {
     if (!prompt.trim() || !onSubmit) return;
-    startTransition(async () => {
-      await onSubmit(prompt);
-    });
+    onSubmit(prompt);
   };
 
   return (
