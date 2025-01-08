@@ -1,61 +1,61 @@
 export const SAMPLE_IMAGES = [
   {
     id: 1,
-    url: "/images/dogs-bg.jpg",
+    url: "https://fal.media/files/tiger/ce7Kdhm1XW-fTECFB5dJJ_f0536b5a8b154aa7a4830290c80cf89d.jpg",
     prompt:
       "A point-of-view image as if taken from a smartphone, showing a man in his mid-30s talking directly to the camera in a selfie-style with a selfie stick, outside shot. he has a warm and expressive face with a slight head tilt and a slight smile, as if recording a vlog or leaving a heartfelt message. The background a park with dogs behind.",
   },
   {
     id: 2,
-    url: "/images/couple-mounteverest-bg.jpg",
+    url: "https://fal.media/files/monkey/LhFhPuhX3wZUjX86Sq7Nx_0040bb028d08463da5cc66cac01d8d9a.jpg",
     prompt:
-      "A point-of-view image as if taken from from a smartphone, a cute couple in their mid 20s,  talking directly to the camera, outside shot. they have a warm and expressive face smiling,  as if recording a vlog or leaving a heartfelt message. the background mount everest peak.",
+      "A point-of-view image as if taken from from a smartphone, a cute couple in their mid 20s,  talking directly to the camera, outside shot. they have a warm and expressive face smiling,  as if recording a vlog or leaving a heartfelt message. the background mount Everest peak.",
   },
   {
     id: 3,
-    url: "/images/couple-china-bg.jpg",
+    url: "https://fal.media/files/elephant/BO2HGFubhdtrh2X9oxwZs_b90af51080564222aa3832981a07dee8.jpg",
     prompt:
-      "A point-of-view image as if taken from from a smartphone, a cute couple in their mid 20s,  talking directly to the camera, outside shot. they have a warm and expressive face smiling,  as if recording a vlog or leaving a heartfelt message. the background great wall of china.",
+      "A point-of-view image as if taken from from a smartphone, a cute couple in their mid 20s,  talking directly to the camera, outside shot. they have a warm and expressive face smiling,  as if recording a vlog or leaving a heartfelt message. the background great wall of China.",
   },
   {
     id: 4,
-    url: "/images/couple-paris-bg.jpg",
+    url: "https://fal.media/files/rabbit/_EUjtpPDLjuHFQ87vWFsG_c8c5d3ad61c84400b0f4d7e66611d098.jpg",
     prompt:
       "A point-of-view image as if taken from from a smartphone, a cute couple in their mid 20s,  talking directly to the camera, outside shot. they have a warm and expressive face smiling,  as if recording a vlog or leaving a heartfelt message. the background Paris",
   },
   {
     id: 5,
-    url: "/images/grass-bg.jpg",
+    url: "https://fal.media/files/elephant/og9FQCmh2xO3zSZEBEtFm_e5c0d23041c54375994c4f43bdaf2eb4.jpg",
     prompt:
       "A point-of-view image as if taken from a smartphone, showing a woman in her mid-30s talking directly to the camera in a selfie-style pose, outside shot. She has a warm and expressive face with a slight head tilt and a confident smile, as if recording a vlog or leaving a heartfelt message. The background laying on grass",
   },
   {
     id: 6,
-    url: "/images/dogs-bg2.jpg",
+    url: "https://fal.media/files/elephant/BptjZUg760GFN0ylZwlCj_34079fb584e442e8a56024afd3b187b0.jpg",
     prompt:
       "A point-of-view image as if taken from a smartphone, showing a man in his mid-40s talking directly to the camera in a selfie-style with a selfie stick, outside shot. he has a warm and expressive face with a slight head tilt, as if recording a vlog or leaving a heartfelt message. The background a park with dogs behind.",
   },
   {
     id: 7,
-    url: "/images/kids-room-bg.png",
+    url: "https://fal.media/files/penguin/zcwIVPgCil1-IbTPBgyPS.png",
     prompt:
       "A point-of-view image as if taken from a smartphone, showing a woman in her mid-30s talking directly to the camera seatting on a bed. She has a warm and expressive face with a slight head tilt and a confident smile, as if recording a vlog or leaving a heartfelt message. The background a kids room",
   },
   {
     id: 8,
-    url: "/images/mountains-bg.png",
+    url: "https://fal.media/files/tiger/miJIfRTqgM34-6v5fPMxR.png",
     prompt:
       "A point-of-view image as if taken from a smartphone, showing a woman in her mid-30s talking directly in a selfie style. She has a warm and expressive face with a slight head tilt and a confident smile, as if recording a vlog or leaving a heartfelt message. The background mountains",
   },
   {
     id: 9,
-    url: "/images/room-bg.png",
+    url: "https://fal.media/files/tiger/ja7Zx0NY9cgrA7obKbzpq_c79b8168436d4cc6af7a7d5d705ff320.jpg",
     prompt:
       "A point-of-view image as if taken from a smartphone, showing a woman in her mid-20s talking directly in a selfie style. She has a warm and expressive face with a slight head tilt and a confident smile, as if recording a vlog or leaving a heartfelt message. The background a living room",
   },
   {
     id: 10,
-    url: "/images/smile-stadium-bg.jpg",
+    url: "https://fal.media/files/elephant/yyehLOctWeLsML3OTNMKZ_83371b7536f940a99faa424cb72b7b91.jpg",
     prompt:
       "A young woman with an expression of surprise and joy, smiling. She has long, wavy hair and is wearing a casual outfit with a colorful top, selfie style. The background is softly blurred, emphasizing her face and emotions, with natural lighting adding warmth to the scene. background stadium",
   },
