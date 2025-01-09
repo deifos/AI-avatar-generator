@@ -53,7 +53,7 @@ export function VideoSection({
     try {
       //LETS MAKE THE MODEL AND ASPECT_RATIO DYNAMIC
       const result = await fal.subscribe(
-        "fal-ai/minimax/video-01/image-to-video",
+        "fal-ai/kling-video/v1/standard/image-to-video",
         {
           input: {
             prompt,
@@ -92,7 +92,10 @@ export function VideoSection({
     <div ref={sectionRef} className="space-y-4 p-6">
       <>
         <h2 className="text-lg font-semibold">Generate the video</h2>
-        <span>Video Generations are using minimax costing $0.50 per video</span>
+        <span>
+          Video Generations are using Kling 1.0 costing $0.03 per sec, videos
+          are 5 seconds
+        </span>
         <PromptForm
           initialPrompt={initialPrompt}
           onSubmit={handleGenerate}
