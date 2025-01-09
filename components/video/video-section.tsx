@@ -52,20 +52,19 @@ export function VideoSection({
 
     try {
       //LETS MAKE THE MODEL AND ASPECT_RATIO DYNAMIC
-      const result = await fal.subscribe(
-        "fal-ai/kling-video/v1.6/pro/image-to-video",
-        {
-          input: {
-            prompt,
-            image_url: sourceImage,
-            aspect_ratio: "9:16",
-          },
-          logs: false,
-          // onQueueUpdate: (update) => {
-          //   console.log("queue update", update);
-          // },
-        }
-      );
+      // const result = await fal.subscribe(
+      //   "fal-ai/kling-video/v1.6/pro/image-to-video",
+      const result = await fal.subscribe("broken", {
+        input: {
+          prompt,
+          image_url: sourceImage,
+          aspect_ratio: "9:16",
+        },
+        logs: false,
+        // onQueueUpdate: (update) => {
+        //   console.log("queue update", update);
+        // },
+      });
 
       onVideoCreated?.({ url: result.data.video.url, prompt });
 
