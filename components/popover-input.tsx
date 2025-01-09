@@ -20,7 +20,6 @@ export default function PopOverInputField() {
 
   const handleSubmit = () => {
     if (!inputValue.trim()) return;
-    console.log(inputValue);
     setApiKey(inputValue);
     setInputValue("");
   };

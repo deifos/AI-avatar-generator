@@ -3,9 +3,9 @@
 import { useState, useRef } from "react";
 import { PromptForm } from "../prompt-form";
 
-import { GenerateVideo } from "@/actions/GenerateVideo";
 import { useApiKey } from "@/hooks/useApiKey";
 import { useToast } from "@/hooks/use-toast";
+import { fal } from "@fal-ai/client";
 
 interface VideoSectionProps {
   onVideoCreated?: (data: { url: string; prompt: string }) => void;
@@ -25,7 +25,9 @@ export function VideoSection({
   const [isPending, setIsPending] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
   const apiKey = useApiKey((state) => state.apiKey);
+
   const { toast } = useToast();
+  fal.config(apiKey ? { credentials: apiKey } : { proxyUrl: "/api/fal/proxy" });
 
   const handleGenerate = async (prompt: string) => {
     setIsGeneratingVideo?.(true);
@@ -49,8 +51,23 @@ export function VideoSection({
     }
 
     try {
-      const data = await GenerateVideo(prompt, sourceImage, apiKey);
-      onVideoCreated?.({ url: data.video.url, prompt });
+      //LETS MAKE THE MODEL AND ASPECT_RATIO DYNAMIC
+      const result = await fal.subscribe(
+        "fal-ai/kling-video/v1.6/pro/image-to-video",
+        {
+          input: {
+            prompt,
+            image_url: sourceImage,
+            aspect_ratio: "9:16",
+          },
+          logs: false,
+          // onQueueUpdate: (update) => {
+          //   console.log("queue update", update);
+          // },
+        }
+      );
+
+      onVideoCreated?.({ url: result.data.video.url, prompt });
 
       toast({
         title: "Success",

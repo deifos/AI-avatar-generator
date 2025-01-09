@@ -4,14 +4,10 @@ import { PromptForm } from "./prompt-form";
 import { GeneratedImage } from "./generated-image";
 import { UploadView } from "./upload-view";
 import { useState, useRef } from "react";
-import { on } from "events";
-import { GenerateImage } from "@/actions/GenerateImage";
-import { Upload } from "lucide-react";
-import { Button } from "./ui/button";
 import { fileToDataUrl } from "@/lib/utils";
 import { useApiKey } from "@/hooks/useApiKey";
-import { Toaster } from "@/components/ui/sonner";
 import { useToast } from "@/hooks/use-toast";
+import { fal } from "@fal-ai/client";
 
 interface PromptSectionProps {
   onImageCreated?: (data: { url: string; prompt: string } | null) => void;
@@ -37,6 +33,8 @@ export function PromptSection({
   const { toast } = useToast();
   const apiKey = useApiKey((state) => state.apiKey);
 
+  fal.config(apiKey ? { credentials: apiKey } : { proxyUrl: "/api/fal/proxy" });
+
   const handleGenerate = async (prompt: string) => {
     setIsGeneratingImage(true);
 
@@ -51,10 +49,21 @@ export function PromptSection({
     }
 
     try {
-      const data = await GenerateImage(prompt, apiKey);
+      //LETS MAKE THE MODEL AND ASPECT_RATIO DYNAMIC
+      const result = await fal.subscribe("fal-ai/flux-pro/v1.1-ultra", {
+        input: {
+          prompt,
+          aspect_ratio: "9:16",
+        },
+        pollInterval: 5000,
+        logs: false,
+        // onQueueUpdate(update) {
+        //   console.log("queue update", update);
+        // },
+      });
 
-      setGeneratedImage({ url: data.images[0].url, prompt });
-      onImageCreated?.({ url: data.images[0].url, prompt });
+      setGeneratedImage({ url: result.data.images[0].url, prompt });
+      onImageCreated?.({ url: result.data.images[0].url, prompt });
 
       toast({
         title: "Success",
@@ -63,7 +72,6 @@ export function PromptSection({
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Unknown error occurred";
-
       toast({
         variant: "destructive",
         title: "Generation Failed",
