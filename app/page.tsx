@@ -112,7 +112,7 @@ export default function Home() {
               <h2 className="text-lg font-semibold ">
                 Generate or upload the image for your avatar
               </h2>
-              <span>Image generations are using Flux-Ultra</span>
+              <span>Image generations are using Flux-Ultra1.1</span>
             </div>
             <PromptSection
               onImageCreated={handleImageCreated}

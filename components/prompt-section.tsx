@@ -50,8 +50,7 @@ export function PromptSection({
 
     try {
       //LETS MAKE THE MODEL AND ASPECT_RATIO DYNAMIC
-      const result = await fal.subscribe("broken", {
-        // const result = await fal.subscribe("fal-ai/flux-pro/v1.1-ultra", {
+      const result = await fal.subscribe("fal-ai/flux-pro/v1.1-ultra", {
         input: {
           prompt,
           aspect_ratio: "9:16",
