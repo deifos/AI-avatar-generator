@@ -75,17 +75,7 @@ export function VideoSection({
     <div ref={sectionRef} className="space-y-4 p-6">
       <>
         <h2 className="text-lg font-semibold">Generate the video</h2>
-        <span>
-          Video Generations are using Kling 1.6 powered by{" "}
-          <a
-            href="https://fal.ai/"
-            target="_blank"
-            rel="noreferrer"
-            className="text-blue-500 hover:underline"
-          >
-            FalAI
-          </a>
-        </span>
+        <span>Video Generations are using Kling 1.6</span>
         <PromptForm
           initialPrompt={initialPrompt}
           onSubmit={handleGenerate}

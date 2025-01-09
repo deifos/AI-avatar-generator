@@ -49,6 +49,7 @@ export default function PopOverInputField() {
             onChange={(e) => setInputValue(e.target.value)}
             onPaste={handlePaste}
             placeholder="Enter your API key"
+            autoComplete="off"
           />
           <PopoverFooter>
             <PopoverCloseButton />

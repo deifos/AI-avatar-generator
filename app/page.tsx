@@ -112,17 +112,7 @@ export default function Home() {
               <h2 className="text-lg font-semibold ">
                 Generate or upload the image for your avatar
               </h2>
-              <span>
-                Image generations are using Flux-Ultra powered by{" "}
-                <a
-                  href="https://fal.ai/"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-blue-500 hover:underline"
-                >
-                  FalAI
-                </a>
-              </span>
+              <span>Image generations are using Flux-Ultra</span>
             </div>
             <PromptSection
               onImageCreated={handleImageCreated}
