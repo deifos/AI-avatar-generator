@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="flex items-center gap-2">
           <span>Built with 🔨 and 💛 by </span>
           <a
-            href="https://x.com/deifos"
+            href="https://x.com/deifosv"
             target="_blank"
             rel="noopener noreferrer"
             className="text-white hover:text-yellow-300 transition-colors"
@@ -17,7 +17,7 @@ export default function Footer() {
             Vlad
           </a>
           <a
-            href="https://x.com/deifos"
+            href="https://x.com/deifosv"
             target="_blank"
             rel="noopener noreferrer"
             className="text-white hover:text-blue-400 transition-colors"
