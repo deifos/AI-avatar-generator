@@ -1,5 +1,8 @@
 # AI-avatar-generator
 
+# Demo
+https://avatarai-xi.vercel.app/
+
 ## Overview
 
 The AI-avatar-generator is a web application that allows users to create AI-generated influencers. Users can upload an image or generate one using predefined prompts, and then create a video using the generated image. This MVP focuses on providing a seamless experience for users to create and customize their AI influencers.
