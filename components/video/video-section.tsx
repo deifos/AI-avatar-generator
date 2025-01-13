@@ -53,7 +53,7 @@ export function VideoSection({
     try {
       //LETS MAKE THE MODEL AND ASPECT_RATIO DYNAMIC
       const result = await fal.subscribe(
-        "fal-ai/kling-video/v1/standard/image-to-video",
+        "fal-ai/kling-video/v1.6/standard/image-to-video",
         {
           input: {
             prompt,

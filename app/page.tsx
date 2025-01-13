@@ -7,11 +7,12 @@ import { ImageGrid } from "@/components/image-grid";
 import { VideoSection } from "@/components/video/video-section";
 import { VideoGrid } from "@/components/video/video-grid";
 import { Button } from "@/components/ui/button";
-import { Download, LoaderCircle, Video } from "lucide-react";
+import { Download, LoaderCircle, Video, Shirt } from "lucide-react";
 import Footer from "@/components/layout/Footer";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { Alert } from "@/components/ui/alert";
+import { TryOnSection } from "@/components/try-on-section";
 
 export default function Home() {
   const [selectedPrompt, setSelectedPrompt] = useState("");
@@ -33,11 +34,29 @@ export default function Home() {
   const scrollTargetRef = useRef<HTMLDivElement>(null);
   const [isGeneratingVideo, setIsGeneratingVideo] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [tryOnImage, setTryOnImage] = useState<{
+    url: string;
+    prompt: string;
+  } | null>(null);
+  const [isTryOnEnabled, setIsTryOnEnabled] = useState(false);
+  const [isTryOnLoading, setIsTryOnLoading] = useState(false);
+
+  const scrollToTryOn = () => {
+    setTimeout(() => {
+      const tryOnSection = document.getElementById('try-on-section');
+      if (tryOnSection) {
+        tryOnSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 100);
+  };
 
   const scrollToVideo = () => {
     setShowVideo(true);
     setTimeout(() => {
-      window.scrollTo({ top: window.innerHeight, behavior: "smooth" });
+      const videoSection = document.getElementById('video-section');
+      if (videoSection) {
+        videoSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
     }, 100);
   };
 
@@ -130,22 +149,57 @@ export default function Home() {
         <div className="flex justify-center mt-8">
           <Button
             size="lg"
-            onClick={scrollToVideo}
+            onClick={scrollToTryOn}
             className="gap-2"
             disabled={!hasImage || !imageData}
           >
-            <Video className="h-4 w-4" />
-            Go to Generate Video
+            <Shirt className="h-4 w-4" />
+            Go to Try-On Section
           </Button>
         </div>
 
+        {/* TRY ON SECTION */}
+        {imageData && (
+          <div id="try-on-section" className="mt-16">
+            <div className="bg-card rounded-lg shadow-sm border">
+              <div className="px-6 pt-6">
+                <h2 className="text-lg font-semibold">
+                  Try-On Section (Optional)
+                </h2>
+                <span>Upload a clothing item to try on your avatar</span>
+              </div>
+              <TryOnSection
+                modelImage={imageData.url}
+                onTryOnComplete={(data) => {
+                  setTryOnImage(data);
+                  setIsTryOnLoading(false);
+                }}
+                onTryOnStart={() => setIsTryOnLoading(true)}
+              />
+            </div>
+          </div>
+        )}
+        {/* Go to Video Section Button */}
+        <div className="flex justify-center mt-8">
+          <Button
+            size="lg"
+            onClick={scrollToVideo}
+            className="gap-2"
+            disabled={!hasImage}
+          >
+            <Video className="h-4 w-4" />
+            Go to Video Section
+          </Button>
+        </div>
+
+        {/* VIDEO SECTION */}
         {showVideo && imageData && (
-          <div className="mt-16 space-y-8">
+          <div id="video-section" className="mt-16 space-y-8">
             <div className="grid lg:grid-cols-2 gap-8 items-start">
               <div className="bg-card rounded-lg shadow-sm border">
                 <VideoSection
                   initialPrompt={videoPromptSelected}
-                  sourceImage={imageData.url}
+                  sourceImage={tryOnImage ? tryOnImage.url : imageData.url}
                   onVideoCreated={handleVideoCreated}
                   setIsGeneratingVideo={setIsGeneratingVideo}
                 />
@@ -161,8 +215,8 @@ export default function Home() {
                     <h2 className="text-lg font-semibold">Source Image</h2>
                     <div className="relative aspect-[9/16] w-48 max-w-sm mx-auto">
                       <Image
-                        src={imageData.url}
-                        alt={imageData.prompt}
+                        src={tryOnImage ? tryOnImage.url : imageData.url}
+                        alt={tryOnImage ? tryOnImage.prompt : imageData.prompt}
                         fill
                         className={cn(
                           "object-cover rounded-lg",
