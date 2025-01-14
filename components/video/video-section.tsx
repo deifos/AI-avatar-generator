@@ -93,8 +93,8 @@ export function VideoSection({
       <>
         <h2 className="text-lg font-semibold">Generate the video</h2>
         <span>
-          Video Generations are using Kling 1.0 costing $0.03 per sec, videos
-          are 5 seconds
+          Video Generations are using Kling 1.6 standard costing $0.03 per sec,
+          videos are 5 seconds.
         </span>
         <PromptForm
           initialPrompt={initialPrompt}
