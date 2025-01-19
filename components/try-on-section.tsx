@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Download } from "lucide-react";
+import { UpscaleModal } from "./upscale-modal";
 
 interface TryOnSectionProps {
   modelImage: string;
@@ -33,6 +34,9 @@ export function TryOnSection({
   const [resultImage, setResultImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+  const [showUpscaleModal, setShowUpscaleModal] = useState(false);
+  const [imageToDownload, setImageToDownload] = useState<string | null>(null);
+  const [isUpscaling, setIsUpscaling] = useState(false);
 
   const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -102,10 +106,52 @@ export function TryOnSection({
   const handleDownload = async () => {
     if (!resultImage) return;
 
-    try {
-      const response = await fetch(resultImage);
-      const blob = await response.blob();
+    setImageToDownload(resultImage);
+    setShowUpscaleModal(true);
+  };
 
+  const handleUpscaleConfirm = async (scale: number) => {
+    try {
+      setShowUpscaleModal(false);
+      if (scale === 1) {
+        // Download original image
+        await downloadImage(imageToDownload!);
+        return;
+      }
+
+      setIsUpscaling(true);
+      // Call upscale API
+      const result = await fal.subscribe("fal-ai/aura-sr", {
+        input: {
+          image_url: imageToDownload as string,
+        },
+        logs: true,
+        onQueueUpdate: (update) => {
+          if (update.status === "IN_PROGRESS") {
+            // update.logs.map((log) => log.message).forEach(console.log);
+          }
+        },
+      });
+
+      // Download upscaled image
+      await downloadImage(result.data.image.url);
+    } catch (error) {
+      console.error("Failed to upscale image:", error);
+      toast({
+        variant: "destructive",
+        title: "Upscale Failed",
+        description: "Failed to upscale the image",
+      });
+    } finally {
+      setIsUpscaling(false);
+    }
+  };
+
+  // MOVE THIS TO A UTIL FILE
+  const downloadImage = async (imageUrl: string) => {
+    try {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
       const timeStamp = new Date().getTime();
       const fileName = `try-on-image-${timeStamp}.png`;
       const link = document.createElement("a");
@@ -114,7 +160,6 @@ export function TryOnSection({
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-
       URL.revokeObjectURL(link.href);
     } catch (error) {
       console.error("Failed to download image:", error);
@@ -128,6 +173,11 @@ export function TryOnSection({
 
   return (
     <div className="p-6 space-y-6">
+      <UpscaleModal
+        isOpen={showUpscaleModal}
+        onClose={() => setShowUpscaleModal(false)}
+        onConfirm={handleUpscaleConfirm}
+      />
       <div className="grid grid-cols-3 gap-4">
         {/* Original Image */}
         <div className="space-y-4">
@@ -235,11 +285,11 @@ export function TryOnSection({
           {resultImage && !isGenerating && (
             <Button
               onClick={handleDownload}
+              disabled={!resultImage || isUpscaling}
               className="w-full gap-2"
-              variant="outline"
+              // variant="outline"
             >
-              <Download className="h-4 w-4" />
-              Download Result
+              {isUpscaling ? "Upscaling..." : "Download Result"}
             </Button>
           )}
         </div>
